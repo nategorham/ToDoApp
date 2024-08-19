@@ -9,5 +9,7 @@ public class ToDo
         Scanner kbd = new Scanner(System.in);
 
         todo.start(kbd);
+
+        kbd.close();
     }
 }

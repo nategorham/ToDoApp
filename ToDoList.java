@@ -35,21 +35,36 @@ public class ToDoList {
         do {
             System.out.println("What would do?\n" +
                 "1) Add tasks\n" +
-                "2) Remove tasks\n" +
-                "3) Mark tasks as completed\n" +
-                "4) Quit");
+                "2) Remove task\n" +
+                "3) Mark task as completed\n" +
+                "4) Print list\n"+
+                "5) Quit");
+
+            input = kbd.nextInt();
+            kbd.nextLine();
 
             switch (input) {
                 case 1: 
-                    addTask(kbd);
+                    addTasks(kbd);
                     break;
                 case 2: 
-                    removeTask(kbd);
+                    if (todoList.isEmpty()) {
+                        System.out.println("There is nothing to remove!");
+                    } else {
+                        removeTask(kbd);
+                    }
                     break;
                 case 3:
-                    completeTask(kbd);
+                    if (todoList.isEmpty()) {
+                        System.out.println("There is nothing to complete!");
+                    } else {
+                        completeTask(kbd);
+                    }
                     break;
                 case 4:
+                    print();
+                    break;
+                case 5:
                     cont = false;
                     System.out.println("Shutting down To-Do List Command Line...\n" +
                         "Goodbye!");
@@ -61,6 +76,17 @@ public class ToDoList {
         } while (cont);
     }
 
+    private void addTasks(Scanner kbd) {
+        String yn = "";
+
+        do {
+            addTask(kbd);
+
+            System.out.println("would you like to add another task? (y/n)");
+            yn = kbd.nextLine();
+        } while (yn.toLowerCase().equals("y"));
+    }
+
     private void addTask(Scanner kbd) {
         System.out.print("Enter a task: ");
         add(kbd.nextLine());
@@ -70,12 +96,14 @@ public class ToDoList {
         print();
         System.out.println("Which task would you like to remove? Enter the number associated with it.");
         remove(kbd.nextInt());
+        kbd.nextLine();
     }
 
     private void completeTask(Scanner kbd) {
         print();
         System.out.println("Which task would you like to mark as completed? Enter the number associated with it.");
         complete(kbd.nextInt());
+        kbd.nextLine();
     }
 
     //print
