@@ -1,5 +1,7 @@
 package ToDoApp;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,7 +40,8 @@ public class ToDoList {
                 "2) Remove task\n" +
                 "3) Mark task as completed\n" +
                 "4) Print list\n"+
-                "5) Quit");
+                "5) Import list\n" +
+                "6) Quit");
 
             input = kbd.nextInt();
             kbd.nextLine();
@@ -65,6 +68,9 @@ public class ToDoList {
                     print();
                     break;
                 case 5:
+                    importToDoList();
+                    break;
+                case 6:
                     cont = false;
                     System.out.println("Shutting down To-Do List Command Line...\n" +
                         "Goodbye!");
@@ -114,6 +120,26 @@ public class ToDoList {
 
         for (Task task : todoList) {
             System.out.printf("%d) %s", i++, task.toString());
+        }
+    }
+
+    private void importToDoList() {
+        String path = System.getProperty("user.dir") + "/ToDoApp";
+
+        File dir = new File(path);
+
+        String[] textFiles = dir.list(new FilenameFilter() {
+            public boolean accept(File directory, String fileName) {
+                return fileName.endsWith(".txt");
+            }
+        });
+
+        System.out.println("Select a to-do to import:");
+
+        int i = 1;
+
+        for (String string : textFiles) {
+            System.out.printf("%d) %s\n", i++, string);
         }
     }
 }
