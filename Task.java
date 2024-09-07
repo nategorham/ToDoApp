@@ -14,6 +14,11 @@ public class Task {
         status = false;
     }
 
+    public Task(String task, boolean status) {
+        this.task = task;
+        this.status = status;
+    }
+
     public void setTask(String task) {
         this.task = task;
     }

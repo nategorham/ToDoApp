@@ -1,6 +1,7 @@
 package ToDoApp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,6 +18,10 @@ public class ToDoList {
     public void add(String task) {
         todoList.add(new Task(task));
     }
+
+    public void add(String task, boolean status) {
+        todoList.add(new Task(task, status));
+    } 
 
     //remove
     public void remove(int idx) {
@@ -35,7 +40,7 @@ public class ToDoList {
         int input = 0;
 
         do {
-            System.out.println("What would do?\n" +
+            System.out.println("What would you like to do?\n" +
                 "1) Add tasks\n" +
                 "2) Remove task\n" +
                 "3) Mark task as completed\n" +
@@ -68,7 +73,7 @@ public class ToDoList {
                     print();
                     break;
                 case 5:
-                    importToDoList();
+                    importToDoList(kbd);
                     break;
                 case 6:
                     cont = false;
@@ -123,7 +128,10 @@ public class ToDoList {
         }
     }
 
-    private void importToDoList() {
+    private void importToDoList(Scanner kbd) {
+
+        // Showing txt files in this folder
+
         String path = System.getProperty("user.dir") + "/ToDoApp";
 
         File dir = new File(path);
@@ -141,5 +149,46 @@ public class ToDoList {
         for (String string : textFiles) {
             System.out.printf("%d) %s\n", i++, string);
         }
+
+        // select file
+
+        System.out.println("Which list would you like to import? Enter the number associated with it.");
+
+        String fileName = textFiles[kbd.nextInt() - 1];
+
+        File importee = new File(path + "/" + fileName);
+
+        Scanner importer;
+
+        try {
+            importer = new Scanner(importee);
+
+            // parse data
+
+            String taskLine = "";
+            String curTask = "";
+            boolean curStat = false;
+            String[] parts = null;
+
+            while (importer.hasNext()) {
+                taskLine = importer.nextLine();
+
+                parts = taskLine.split("\\|", 2);
+
+                curTask = parts[0].trim();
+
+                curStat = parts[1].endsWith("TRUE");
+
+
+                add(curTask, curStat);
+            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+            importer = null;
+        }
+
+        importer.close();
     }
 }
